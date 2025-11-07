@@ -1,9 +1,11 @@
+import { Routes, Route, Link } from 'react-router-dom';
 import eduicon from './assets/eduicon.png'
 import './App.css'
-import Cursos from './components/Cursos';
-import Estudantes from './components/Estudantes';
-import Turmas from './components/Turmas';
-import Notas from './components/Notas';
+import HomePage from './pages/HomePage';
+import CursosPage from './pages/CursosPage';
+import EstudantesPage from './pages/EstudantesPage';
+import TurmasPage from './pages/TurmasPage';
+import NotasPage from './pages/NotasPage';
 
 function App() {
   return (
@@ -14,19 +16,22 @@ function App() {
       <h1>Futura Educação</h1>
 
       <nav className="navbar">
-        <a href="#home">Início</a>
-        <a href="#cursos">Cursos</a>
-        <a href="#turmas">Turmas</a>
-        <a href="#estudantes">Estudantes</a>
-        <a href="#notas">Notas</a>
+        <Link to="/">Início</Link>
+        <Link to="/cursos">Cursos</Link>
+        <Link to="/turmas">Turmas</Link>
+        <Link to="/estudantes">Estudantes</Link>
+        <Link to="/notas">Notas</Link>
       </nav>
 
-      <div className="lists-container">
-        <Cursos />
-        <Estudantes />
-        <Turmas />
-        <Notas />
-      </div>
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/cursos" element={<CursosPage />} />
+          <Route path="/turmas" element={<TurmasPage />} />
+          <Route path="/estudantes" element={<EstudantesPage />} />
+          <Route path="/notas" element={<NotasPage />} />
+        </Routes>
+      </main>
     </>
   )
 }
