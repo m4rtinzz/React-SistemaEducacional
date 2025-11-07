@@ -33,6 +33,26 @@
   }
 }
 
+.navbar {
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.navbar a {
+  color: #646cff;
+  border-bottom: 1px dotted transparent;
+  transition: border-color 0.25s;
+}
+.navbar a:visited {
+  color: #646cff;
+}
+
+.navbar a:hover {
+  border-color: #646cff;
+}
+
 .card {
   padding: 2em;
 }
