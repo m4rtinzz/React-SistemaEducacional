@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 
 interface Curso {
-  name: string;
+  
   id: string;
+  title: string;
+  code: string;
+  credits: number;
 }
 
 const API_URL = 'https://api-estudo-educacao-1.onrender.com/courses';
@@ -68,7 +71,7 @@ function Cursos() {
   return (
     <section>
       <h2>Cursos Disponíveis</h2>
-      <button onClick={handleAddNew}>Adicionar Novo Curso</button>
+      <button onClick={handleAddNew} className="btn-add">Adicionar Novo Curso</button>
 
       {showForm && (
         <form onSubmit={handleFormSubmit}>
@@ -77,7 +80,7 @@ function Cursos() {
             type="text" 
             name="name" 
             placeholder="Nome do curso" 
-            defaultValue={editingCurso?.name} 
+            defaultValue={editingCurso?.title} 
             required 
           />
           <input 
@@ -87,8 +90,10 @@ function Cursos() {
             defaultValue={editingCurso?.id} 
             required 
           />
-          <button type="submit">Salvar</button>
-          <button type="button" onClick={() => setShowForm(false)}>Cancelar</button>
+          <div>
+            <button type="submit" className="btn-add">Salvar</button>
+            <button type="button" onClick={() => setShowForm(false)}>Cancelar</button>
+          </div>
         </form>
       )}
 
@@ -103,7 +108,7 @@ function Cursos() {
         <tbody>
           {cursos.map(curso => (
             <tr key={curso.id}>
-              <td>{curso.name.charAt(0).toUpperCase() + curso.name.slice(1)}</td>
+              <td>{curso.title.charAt(0).toUpperCase() + curso.title.slice(1)}</td>
               <td>{curso.id}</td>
               <td>
                 <button onClick={() => handleEdit(curso)}>Editar</button>
