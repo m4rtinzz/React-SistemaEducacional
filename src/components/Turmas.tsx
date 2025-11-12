@@ -9,12 +9,12 @@ interface Turma {
 }
 
 interface Curso {
-  name: string;
-  id: number;
+  title: string;
+  id: string;
 }
 
-const API_URL_TURMAS = 'https://api-estudo-educacao-1.onrender.com/turmas';
-const API_URL_CURSOS = 'https://api-estudo-educacao-1.onrender.com/cursos';
+const API_URL_TURMAS = 'https://api-estudo-educacao-1.onrender.com/classes';
+const API_URL_CURSOS = 'https://api-estudo-educacao-1.onrender.com/courses';
 
 function Turmas() {
   const [turmas, setTurmas] = useState<Turma[]>([]);
@@ -27,12 +27,7 @@ function Turmas() {
       fetch(API_URL_TURMAS).then(res => res.json()),
       fetch(API_URL_CURSOS).then(res => res.json())
     ]).then(([turmasData, cursosData]: [Turma[], Curso[]]) => {
-      // Mapeia o nome do curso para cada turma
-      const turmasComNomes = turmasData.map(turma => {
-        const curso = cursosData.find(c => c.id === turma.courseId);
-        return { ...turma, nome_curso: curso ? curso.nome : 'Curso não encontrado' };
-      });
-      setTurmas(turmasComNomes);
+      setTurmas(turmasData);
       setCursos(cursosData);
     });
   };
@@ -62,10 +57,10 @@ function Turmas() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const turmaData = {
-      courseId: Number(formData.get('id_curso')),
-      teacherId: formData.get('teacherId') as string,
-      semester: formData.get('semester') as string,
-      room: formData.get('room') as string,
+      courseId: Number(formData.get('courseId')),
+      teacherId: Number(formData.get('teacherId')),
+      semester: formData.get('semester'),
+      room: formData.get('room'),
     };
 
     const method = editingTurma ? 'PUT' : 'POST';
@@ -91,15 +86,15 @@ function Turmas() {
       {showForm && (
         <form onSubmit={handleFormSubmit}>
           <h3>{editingTurma ? 'Editar Turma' : 'Adicionar Nova Turma'}</h3>
-          <select name="id_curso" defaultValue={editingTurma?.id_curso} required>
+          <select name="courseId" defaultValue={editingTurma?.courseId} required>
             <option value="" disabled>Selecione um curso</option>
             {cursos.map(curso => (
-              <option key={curso.id} value={curso.id}>{curso.nome}</option>
+              <option key={curso.id} value={curso.id}>{curso.title}</option>
             ))}
           </select>
-          <input type="text" name="teacherId" placeholder="Id do Professor" defaultValue={editingTurma?.teacherId} required />
-          <input type="text" name="semestre" placeholder="Semestre (ex: 2025.2)" defaultValue={editingTurma?.semester} required />
-          <input type="text" name="sala" placeholder="Sala" defaultValue={editingTurma?.sala} required />
+          <input type="number" name="teacherId" placeholder="Id do Professor" defaultValue={editingTurma?.teacherId} required />
+          <input type="text" name="semester" placeholder="Semestre (ex: 2025.2)" defaultValue={editingTurma?.semester} required />
+          <input type="text" name="room" placeholder="Sala" defaultValue={editingTurma?.room} required />
           <div>
             <button type="submit" className="btn-add">Salvar</button>
             <button type="button" onClick={() => setShowForm(false)}>Cancelar</button>
@@ -110,7 +105,7 @@ function Turmas() {
       <table>
         <thead>
           <tr>
-            <th>Id do Curso</th>
+            <th>Curso</th>
             <th>Id do Professor</th>
             <th>Semestre</th>
             <th>Sala</th>
@@ -120,7 +115,7 @@ function Turmas() {
         <tbody>
           {turmas.map(turma => (
             <tr key={turma.id}>
-              <td>{turma.courseId}</td>
+              <td>{cursos.find(c => c.id === String(turma.courseId))?.title || 'Curso não encontrado'}</td>
               <td>{turma.teacherId}</td>
               <td>{turma.semester}</td>
               <td>{turma.room}</td>

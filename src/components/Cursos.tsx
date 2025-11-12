@@ -49,8 +49,10 @@ function Cursos() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const cursoData = {
-      nome: formData.get('nome') as string,
-      id: formData.get('id') as string,
+      title: formData.get('title') as string,
+      code: formData.get('code') as string,
+      credits: Number(formData.get('credits')),
+      id: editingCurso ? editingCurso.id : String(Date.now()), // Mantém o ID na edição, gera um novo na criação
     };
 
     const method = editingCurso ? 'PUT' : 'POST';
@@ -78,16 +80,23 @@ function Cursos() {
           <h3>{editingCurso ? 'Editar Curso' : 'Adicionar Novo Curso'}</h3>
           <input 
             type="text" 
-            name="name" 
+            name="title" 
             placeholder="Nome do curso" 
             defaultValue={editingCurso?.title} 
             required 
           />
           <input 
-            type="string" 
-            name="id" 
-            placeholder="ID do curso" 
-            defaultValue={editingCurso?.id} 
+            type="text" 
+            name="code" 
+            placeholder="Código do curso" 
+            defaultValue={editingCurso?.code} 
+            required 
+          />
+          <input 
+            type="number" 
+            name="credits" 
+            placeholder="Créditos" 
+            defaultValue={editingCurso?.credits} 
             required 
           />
           <div>
@@ -101,15 +110,17 @@ function Cursos() {
         <thead>
           <tr>
             <th>Nome</th>
-            <th>ID</th>
+            <th>Código</th>
+            <th>Créditos</th>
             <th>Ações</th>
           </tr>
         </thead>
         <tbody>
           {cursos.map(curso => (
             <tr key={curso.id}>
-              <td>{curso.title.charAt(0).toUpperCase() + curso.title.slice(1)}</td>
-              <td>{curso.id}</td>
+              <td>{curso.title}</td>
+              <td>{curso.code}</td>
+              <td>{curso.credits}</td>
               <td>
                 <button onClick={() => handleEdit(curso)}>Editar</button>
                 <button onClick={() => handleDelete(curso.id)}>Excluir</button>
